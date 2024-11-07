@@ -1,6 +1,6 @@
 package com.fast.learners.platform.iam.infrastructure.authorization.sfs.configuration;
 
-import com.fast.learners.platform.iam.infrastructure.authorization.sfs.pipeline.BearerAuthorizationRequestFilter;
+/** import com.fast.learners.platform.iam.infrastructure.authorization.sfs.pipeline.BearerAuthorizationRequestFilter;
 import com.fast.learners.platform.iam.infrastructure.hashing.bcrypt.BCryptHashingService;
 import com.fast.learners.platform.iam.infrastructure.tokens.jwt.BearerTokenService;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -29,38 +29,50 @@ import java.util.List;
  * It includes the authentication manager, the authentication provider, the password encoder and the authentication entry point.
  * </p>
  */
-@Configuration
-@EnableMethodSecurity
+
+
+
 public class WebSecurityConfiguration {
 
+    /**
     private final UserDetailsService userDetailsService;
     private final BearerTokenService tokenService;
     private final BCryptHashingService hashingService;
     private final AuthenticationEntryPoint unauthorizedRequestHandler;
 
+     */
+
     /**
      * This method creates the Bearer Authorization Request Filter.
      * @return The Bearer Authorization Request Filter
      */
+
+    /**
     @Bean
     public BearerAuthorizationRequestFilter authorizationRequestFilter() {
         return new BearerAuthorizationRequestFilter(tokenService, userDetailsService);
     }
 
+    */
     /**
      * This method creates the authentication manager.
      * @param authenticationConfiguration The authentication configuration
      * @return The authentication manager
      */
+
+    /**
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception {
         return authenticationConfiguration.getAuthenticationManager();
     }
+    */
 
     /**
      * This method creates the authentication provider.
      * @return The authentication provider
      */
+
+    /**
     @Bean
     public DaoAuthenticationProvider authenticationProvider() {
         var authenticationProvider = new DaoAuthenticationProvider();
@@ -68,15 +80,19 @@ public class WebSecurityConfiguration {
         authenticationProvider.setPasswordEncoder(hashingService);
         return authenticationProvider;
     }
+    */
 
     /**
      * This method creates the password encoder.
      * @return The password encoder
      */
+
+    /**
     @Bean
     public PasswordEncoder passwordEncoder() {
         return hashingService;
     }
+    */
 
     /**
      * This method creates the security filter chain.
@@ -85,18 +101,20 @@ public class WebSecurityConfiguration {
      * @param http The http security
      * @return The security filter chain
      */
+
+    /**
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http.cors(configurer -> configurer.configurationSource(_ -> {
             var cors = new CorsConfiguration();
-            cors.setAllowedOrigins(List.of("*"));
-            cors.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE"));
-            cors.setAllowedHeaders(List.of("*"));
+            cors.applyPermitDefaultValues();
+            cors.addAllowedOriginPattern("*");
             return cors;
         }));
         return http.build();
 
     }
+    */
 
     /**
      * This is the constructor of the class.
@@ -105,10 +123,12 @@ public class WebSecurityConfiguration {
      * @param hashingService The hashing service
      * @param authenticationEntryPoint The authentication entry point
      */
+
+    /**
     public WebSecurityConfiguration(@Qualifier("defaultUserDetailsService") UserDetailsService userDetailsService, BearerTokenService tokenService, BCryptHashingService hashingService, AuthenticationEntryPoint authenticationEntryPoint) {
         this.userDetailsService = userDetailsService;
         this.tokenService = tokenService;
         this.hashingService = hashingService;
         this.unauthorizedRequestHandler = authenticationEntryPoint;
-    }
+    }*/
 }

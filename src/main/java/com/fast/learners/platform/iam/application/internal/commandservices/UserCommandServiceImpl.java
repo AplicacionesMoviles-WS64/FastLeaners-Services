@@ -24,15 +24,13 @@ import java.util.Optional;
 public class UserCommandServiceImpl implements UserCommandService {
 
     private final UserRepository userRepository;
-    private final HashingService hashingService;
-    private final TokenService tokenService;
+    /* private final HashingService hashingService; */
 
     private final MembershipRepository membershipRepository;
 
-    public UserCommandServiceImpl(UserRepository userRepository, HashingService hashingService, TokenService tokenService, MembershipRepository membershipRepository) {
+    public UserCommandServiceImpl(UserRepository userRepository /*, HashingService hashingService , TokenService tokenService */, MembershipRepository membershipRepository) {
         this.userRepository = userRepository;
-        this.hashingService = hashingService;
-        this.tokenService = tokenService;
+        /* this.hashingService = hashingService;*/
         this.membershipRepository = membershipRepository;
     }
 
@@ -50,10 +48,14 @@ public class UserCommandServiceImpl implements UserCommandService {
         var user = userRepository.findByUsername(command.username());
         if (user.isEmpty())
             throw new RuntimeException("Profile not found");
-        if (!hashingService.matches(command.password(), user.get().getPassword()))
+
+        /* if (!hashingService.matches(command.password(), user.get().getPassword()))
             throw new RuntimeException("Invalid password");
-        var token = tokenService.generateToken(user.get().getUsername());
-        return Optional.of(ImmutablePair.of(user.get(), token));
+
+         */
+        /** var token = tokenService.generateToken(user.get().getUsername()); **/
+
+        return Optional.of(ImmutablePair.of(user.get(), ""));
     }
 
     /**
@@ -69,7 +71,7 @@ public class UserCommandServiceImpl implements UserCommandService {
         if (userRepository.existsByUsername(command.username()))
             throw new RuntimeException("Username already exists");
         var memberships = command.memberships().stream().map(membership -> membershipRepository.findByName(membership.getName()).orElseThrow(() -> new RuntimeException("Membership name not found"))).toList();
-        var user = new User(command.username(), hashingService.encode(command.password()), memberships);
+        var user = new User(command.username(), command.password(), memberships);
         userRepository.save(user);
         return userRepository.findByUsername(command.username());
     }

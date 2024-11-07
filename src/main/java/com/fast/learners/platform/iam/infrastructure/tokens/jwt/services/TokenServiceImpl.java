@@ -9,7 +9,10 @@ import org.apache.commons.lang3.time.DateUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
+/*
 import org.springframework.security.core.Authentication;
+*/
+
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
@@ -23,8 +26,9 @@ import java.util.function.Function;
  * This class is responsible for generating and validating JWT tokens.
  * It uses the secret and expiration days from the application.properties file.
  */
-@Service
-public class TokenServiceImpl implements BearerTokenService {
+
+
+public class TokenServiceImpl {
     private final Logger LOGGER = LoggerFactory.getLogger(TokenServiceImpl.class);
 
     private static final String AUTHORIZATION_PARAMETER_NAME = "Authorization";
@@ -43,12 +47,13 @@ public class TokenServiceImpl implements BearerTokenService {
      * This method generates a JWT token from an authentication object
      * @param authentication the authentication object
      * @return String the JWT token
-     * @see Authentication
      */
+    /**
     @Override
     public String generateToken(Authentication authentication) {
         return buildTokenWithDefaultParameters(authentication.getName());
     }
+    */
 
     /**
      * This method generates a JWT token from a username
@@ -82,7 +87,6 @@ public class TokenServiceImpl implements BearerTokenService {
      * @param token the token
      * @return String the username
      */
-    @Override
     public String getUsernameFromToken(String token) {
         return extractClaim(token, Claims::getSubject);
     }
@@ -92,7 +96,6 @@ public class TokenServiceImpl implements BearerTokenService {
      * @param token the token
      * @return boolean true if the token is valid, false otherwise
      */
-    @Override
     public boolean validateToken(String token) {
         try {
             Jwts.parser().verifyWith(getSigningKey()).build().parseSignedClaims(token);
@@ -159,7 +162,6 @@ public class TokenServiceImpl implements BearerTokenService {
         return request.getHeader(AUTHORIZATION_PARAMETER_NAME);
     }
 
-    @Override
     public String getBearerTokenFrom(HttpServletRequest request) {
         String parameter = getAuthorizationParameterFrom(request);
         if (isTokenPresentIn(parameter) && isBearerTokenIn(parameter)) return extractTokenFrom(parameter);

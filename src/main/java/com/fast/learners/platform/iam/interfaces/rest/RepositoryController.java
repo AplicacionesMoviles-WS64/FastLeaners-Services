@@ -24,7 +24,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 @RestController
-@RequestMapping("/api/v1/repository")
+@RequestMapping("/api/v1/repositories")
 @Tag(name = "Repositories", description = "Operations related to repositories")
 
 public class RepositoryController {
@@ -39,7 +39,7 @@ public class RepositoryController {
     }
 
     /**
-     * GET /api/v1/repository
+     * GET /api/v1/repositories
      * Obtiene todos los repositorios.
      */
 
@@ -56,7 +56,7 @@ public class RepositoryController {
     }
 
     /**
-     * GET /api/v1/repository/{id}
+     * GET /api/v1/repositories/{id}
      * Obtiene un repositorio por su ID.
      */
     @ApiResponses(value = {
@@ -80,7 +80,7 @@ public class RepositoryController {
     }
 
     /**
-     * POST /api/v1/repository
+     * POST /api/v1/repositories
      * Crea un nuevo repositorio.
      */
     @ApiResponses(value = {
