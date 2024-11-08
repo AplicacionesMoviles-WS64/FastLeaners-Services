@@ -2,13 +2,14 @@ package com.fast.learners.platform.iam.domain.model.entities;
 
 
 import com.fast.learners.platform.iam.domain.model.commands.CreateRepositoryCommand;
+import com.fast.learners.platform.shared.domain.model.aggregates.AuditableAbstractAggregateRoot;
 import jakarta.persistence.*;
 import lombok.*;
 
 @Entity
 @Getter
 @AllArgsConstructor
-public class Repository {
+public class Repository extends AuditableAbstractAggregateRoot<Repository> {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
