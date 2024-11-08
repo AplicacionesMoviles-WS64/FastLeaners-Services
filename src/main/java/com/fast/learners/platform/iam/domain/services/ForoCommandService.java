@@ -1,7 +1,8 @@
 package com.fast.learners.platform.iam.domain.services;
 
-import com.fast.learners.platform.iam.domain.model.commands.CreateContentCommand;
+import com.fast.learners.platform.iam.domain.model.commands.CreateForoCommand;
+import com.fast.learners.platform.iam.domain.model.entities.Foro;
 
 public interface ForoCommandService {
-    void handle(CreateContentCommand command);
+    Foro handle(CreateForoCommand command);
 }

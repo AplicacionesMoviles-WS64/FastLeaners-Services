@@ -5,5 +5,5 @@ public record ForoResource (
         String postTitle,
         String postBody,
         Long userId,
-        String  authorName
+        String  username
 ) {}
