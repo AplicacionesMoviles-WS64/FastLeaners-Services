@@ -4,6 +4,7 @@ import com.fast.learners.platform.iam.domain.model.commands.CreateRepositoryComm
 import com.fast.learners.platform.iam.domain.model.entities.Repository;
 import com.fast.learners.platform.iam.domain.model.queries.GetAllRepositoriesQuery;
 import com.fast.learners.platform.iam.domain.model.queries.GetRepositoryByIdQuery;
+import com.fast.learners.platform.iam.domain.model.queries.GetRepositoryNameByIdQuery;
 
 import java.util.List;
 import java.util.Optional;
@@ -13,4 +14,6 @@ public interface RepositoryQueryService {
     List<Repository> handle(GetAllRepositoriesQuery query);
 
     Optional<Repository> handle(GetRepositoryByIdQuery query);
+
+    Optional<String> handle(GetRepositoryNameByIdQuery query);
 }

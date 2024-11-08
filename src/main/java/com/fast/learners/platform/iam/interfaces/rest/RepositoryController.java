@@ -4,6 +4,7 @@ import com.fast.learners.platform.iam.domain.model.commands.CreateRepositoryComm
 import com.fast.learners.platform.iam.domain.model.entities.Repository;
 import com.fast.learners.platform.iam.domain.model.queries.GetAllRepositoriesQuery;
 import com.fast.learners.platform.iam.domain.model.queries.GetRepositoryByIdQuery;
+import com.fast.learners.platform.iam.domain.model.queries.GetRepositoryNameByIdQuery;
 import com.fast.learners.platform.iam.domain.services.RepositoryCommandService;
 import com.fast.learners.platform.iam.domain.services.RepositoryQueryService;
 import com.fast.learners.platform.iam.interfaces.rest.resources.CreateRepositoryResource;
@@ -83,6 +84,21 @@ public class RepositoryController {
      * POST /api/v1/repositories
      * Crea un nuevo repositorio.
      */
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "201", description = "Repositorio creado exitosamente"),
+            @ApiResponse(responseCode = "400", description = "Solicitud incorrecta"),
+            @ApiResponse(responseCode = "500", description = "Error interno del servidor")
+    })
+    @GetMapping("/{id}/name")
+    public ResponseEntity<String> getRepositoryNameById(@PathVariable Long id) {
+        GetRepositoryNameByIdQuery query = new GetRepositoryNameByIdQuery(id);
+        Optional<String> repositoryName = repositoryQueryService.handle(query);
+        if (repositoryName.isEmpty()) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(repositoryName.get());
+    }
+
     @ApiResponses(value = {
             @ApiResponse(responseCode = "201", description = "Repositorio creado exitosamente"),
             @ApiResponse(responseCode = "400", description = "Solicitud incorrecta"),
