@@ -20,14 +20,17 @@ public class Foro {
 
     @Column
     private String body;
+    @Column
+    private int like;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "user_id", nullable = false)
     private User user; // Relación con la entidad User
 
-    public Foro(String title, String body, User user) {
+    public Foro(String title, String body, int Like, User user) {
         this.title = title;
         this.body = body;
+        this.like = Like;
         this.user = user;
     }
 }
