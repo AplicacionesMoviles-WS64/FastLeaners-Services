@@ -2,16 +2,16 @@ package com.fast.learners.platform.iam.interfaces.rest;
 
 import com.fast.learners.platform.iam.domain.model.queries.GetAllUsersQuery;
 import com.fast.learners.platform.iam.domain.model.queries.GetUserByIdQuery;
+import com.fast.learners.platform.iam.domain.services.UserCommandService;
 import com.fast.learners.platform.iam.domain.services.UserQueryService;
+import com.fast.learners.platform.iam.interfaces.rest.resources.SetUserMembershipResource;
 import com.fast.learners.platform.iam.interfaces.rest.resources.UserResource;
+import com.fast.learners.platform.iam.interfaces.rest.transform.SetUserMembershipCommandFromResourceAssembler;
 import com.fast.learners.platform.iam.interfaces.rest.transform.UserResourceFromEntityAssembler;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -25,10 +25,32 @@ import java.util.List;
 @RequestMapping(value = "/api/v1/users", produces = MediaType.APPLICATION_JSON_VALUE)
 @Tag(name = "Users", description = "Profile Management Endpoints")
 public class UsersController {
+
+    private final UserCommandService userCommandService;
     private final UserQueryService userQueryService;
 
-    public UsersController(UserQueryService userQueryService) {
+    public UsersController(UserCommandService userCommandService, UserQueryService userQueryService) {
+        this.userCommandService = userCommandService;
         this.userQueryService = userQueryService;
+    }
+
+    @PutMapping("/setMembership")
+    public ResponseEntity<UserResource> updateUser(@RequestBody SetUserMembershipResource setUserMembershipResource) {
+
+        System.out.println(setUserMembershipResource);
+        var user = userQueryService.handle(new GetUserByIdQuery(setUserMembershipResource.id()));
+
+        if (user.isEmpty()){
+            return ResponseEntity.notFound().build();
+        }
+
+        var setUserMembershipCommand = SetUserMembershipCommandFromResourceAssembler
+                .toCommandFromResource(setUserMembershipResource);
+
+        var userResult = UserResourceFromEntityAssembler
+                .toResourceFromEntity(userCommandService.handle(setUserMembershipCommand).get());
+
+        return ResponseEntity.ok(userResult);
     }
 
     /**

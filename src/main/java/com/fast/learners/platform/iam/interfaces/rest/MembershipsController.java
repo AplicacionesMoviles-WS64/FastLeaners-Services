@@ -18,7 +18,7 @@ import java.util.List;
  *  This controller is responsible for handling all the requests related to memberships
  */
 @RestController
-@RequestMapping(value = "/ap/v1/memberships", produces = MediaType.APPLICATION_JSON_VALUE)
+@RequestMapping(value = "/api/v1/memberships", produces = MediaType.APPLICATION_JSON_VALUE)
 @Tag(name = "Memberships", description = "Membership Management Endpoints")
 public class MembershipsController {
     private final MembershipQueryService membershipQueryService;

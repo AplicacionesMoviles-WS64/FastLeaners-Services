@@ -3,15 +3,20 @@ package com.fast.learners.platform.iam.application.internal.commandservices;
 import com.fast.learners.platform.iam.application.internal.outboundservices.hashing.HashingService;
 import com.fast.learners.platform.iam.application.internal.outboundservices.tokens.TokenService;
 import com.fast.learners.platform.iam.domain.model.aggregates.User;
+import com.fast.learners.platform.iam.domain.model.commands.SetUserMembershipCommand;
 import com.fast.learners.platform.iam.domain.model.commands.SignInCommand;
 import com.fast.learners.platform.iam.domain.model.commands.SignUpCommand;
+import com.fast.learners.platform.iam.domain.model.entities.Membership;
 import com.fast.learners.platform.iam.domain.services.UserCommandService;
 import com.fast.learners.platform.iam.infrastructure.persistence.jpa.repositories.MembershipRepository;
 import com.fast.learners.platform.iam.infrastructure.persistence.jpa.repositories.UserRepository;
 import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.springframework.stereotype.Service;
 
+import java.util.HashSet;
+import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 /**
  * Profile command service implementation
@@ -84,5 +89,21 @@ public class UserCommandServiceImpl implements UserCommandService {
 
         userRepository.save(user);
         return userRepository.findByUsername(command.username());
+    }
+
+    @Override
+    public Optional<User> handle(SetUserMembershipCommand command) {
+
+        var user = userRepository.findById(command.id()).get();
+
+        Membership membership = Membership.toMembershipFromName(command.memberships().get(0));
+        Set<Membership> memberships = new HashSet<>();
+
+        memberships.add(membership);
+
+        user.setMemberships(memberships);
+
+
+        return Optional.empty();
     }
 }
