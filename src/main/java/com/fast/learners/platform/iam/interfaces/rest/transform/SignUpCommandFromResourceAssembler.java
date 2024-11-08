@@ -9,6 +9,6 @@ import java.util.*;
 public class SignUpCommandFromResourceAssembler {
     public static SignUpCommand toCommandFromResource(SignUpResource resource) {
         var memberships = resource.memberships() != null ? resource.memberships().stream().map(name -> Membership.toMembershipFromName(name)).toList() : new ArrayList<Membership>();
-        return new SignUpCommand(resource.username(), resource.password(), memberships);
+        return new SignUpCommand(resource.username(), resource.email(), resource.password(), memberships);
     }
 }

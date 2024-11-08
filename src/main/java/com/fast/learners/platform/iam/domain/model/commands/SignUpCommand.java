@@ -4,5 +4,9 @@ import com.fast.learners.platform.iam.domain.model.entities.Membership;
 
 import java.util.List;
 
-public record SignUpCommand(String username, String password, List<Membership> memberships) {
+public record SignUpCommand(
+        String username,
+        String email,
+        String password,
+        List<Membership> memberships) {
 }

@@ -35,8 +35,8 @@ public class IamContextFacade {
      * @param password The password of the user.
      * @return The id of the created user.
      */
-    public Long createUser(String username, String password) {
-        var signUpCommand = new SignUpCommand(username, password, List.of(Membership.getDefaultMembership()));
+    public Long createUser(String username, String email, String password) {
+        var signUpCommand = new SignUpCommand(username, email, password, List.of(Membership.getDefaultMembership()));
         var result = userCommandService.handle(signUpCommand);
         if (result.isEmpty()) return 0L;
         return result.get().getId();
@@ -49,9 +49,9 @@ public class IamContextFacade {
      * @param roleNames The names of the memberships of the user. When a membership does not exist, it is ignored.
      * @return The id of the created user.
      */
-    public Long createUser(String username, String password, List<String> roleNames) {
+    public Long createUser(String username, String email, String password, List<String> roleNames) {
         var memberships = roleNames != null ? roleNames.stream().map(Membership::toMembershipFromName).toList() : new ArrayList<Membership>();
-        var signUpCommand = new SignUpCommand(username, password, memberships);
+        var signUpCommand = new SignUpCommand(username, email, password, memberships);
         var result = userCommandService.handle(signUpCommand);
         if (result.isEmpty()) return 0L;
         return result.get().getId();

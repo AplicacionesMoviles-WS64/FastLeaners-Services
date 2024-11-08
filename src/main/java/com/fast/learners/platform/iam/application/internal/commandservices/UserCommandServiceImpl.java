@@ -45,6 +45,7 @@ public class UserCommandServiceImpl implements UserCommandService {
      */
     @Override
     public Optional<ImmutablePair<User, String>> handle(SignInCommand command) {
+        System.out.println(command.username());
         var user = userRepository.findByUsername(command.username());
         if (user.isEmpty())
             throw new RuntimeException("Profile not found");
@@ -70,8 +71,17 @@ public class UserCommandServiceImpl implements UserCommandService {
     public Optional<User> handle(SignUpCommand command) {
         if (userRepository.existsByUsername(command.username()))
             throw new RuntimeException("Username already exists");
-        var memberships = command.memberships().stream().map(membership -> membershipRepository.findByName(membership.getName()).orElseThrow(() -> new RuntimeException("Membership name not found"))).toList();
-        var user = new User(command.username(), command.password(), memberships);
+
+        var memberships = command
+                .memberships()
+                .stream()
+                .map(membership ->
+                        membershipRepository
+                                .findByName(membership.getName())
+                                .orElseThrow(() -> new RuntimeException("Membership name not found")))
+                .toList();
+        var user = new User(command.username(), command.email(), command.password(), memberships);
+
         userRepository.save(user);
         return userRepository.findByUsername(command.username());
     }

@@ -14,6 +14,7 @@ import java.sql.Timestamp;
  * ApplicationReadyEventHandler class
  * This class is used to handle the ApplicationReadyEvent
  */
+@Service
 public class ApplicationReadyEventHandler {
     private final MembershipCommandService membershipCommandService;
     private static final Logger LOGGER = LoggerFactory.getLogger(ApplicationReadyEventHandler.class);
