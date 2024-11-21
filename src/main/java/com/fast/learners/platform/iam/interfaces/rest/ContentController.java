@@ -46,8 +46,10 @@ public class ContentController {
     })
     @GetMapping
     public ResponseEntity<List<ContentResource>> getAllContentsByRepositoryId(@PathVariable Long repositoryId) {
+
         GetAllContentByRepositoryId query = new GetAllContentByRepositoryId(repositoryId);
         List<Content> contents = contentQueryService.handle(query);
+
         List<ContentResource> resources = contents.stream()
                 .map(ContentResourceFromEntityAssembler::toResourceFromEntity)
                 .collect(Collectors.toList());
@@ -65,8 +67,10 @@ public class ContentController {
     })
     @PostMapping
     public ResponseEntity<ContentResource> createContent(@PathVariable Long repositoryId, @RequestBody CreateContentResource createResource) {
+
+        System.out.println(createResource);
         CreateContentCommand command = CreateContentCommandFromResourceAssembler
-                .toCommandFromResource(createResource, repositoryId);
+                .toCommandFromResource(createResource);
 
         contentCommandService.handle(command);
 

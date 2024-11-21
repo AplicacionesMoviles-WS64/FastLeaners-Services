@@ -97,13 +97,12 @@ public class UserCommandServiceImpl implements UserCommandService {
         var user = userRepository.findById(command.id()).get();
 
         Membership membership = Membership.toMembershipFromName(command.memberships().get(0));
+
         Set<Membership> memberships = new HashSet<>();
 
         memberships.add(membership);
-
         user.setMemberships(memberships);
 
-
-        return Optional.empty();
+        return Optional.of(user);
     }
 }
