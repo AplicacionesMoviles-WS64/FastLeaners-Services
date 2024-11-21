@@ -1,11 +1,10 @@
 package com.fast.learners.platform.iam.application.internal.commandservices;
 
-import com.fast.learners.platform.iam.application.internal.outboundservices.hashing.HashingService;
-import com.fast.learners.platform.iam.application.internal.outboundservices.tokens.TokenService;
 import com.fast.learners.platform.iam.domain.model.aggregates.User;
 import com.fast.learners.platform.iam.domain.model.commands.SetUserMembershipCommand;
 import com.fast.learners.platform.iam.domain.model.commands.SignInCommand;
 import com.fast.learners.platform.iam.domain.model.commands.SignUpCommand;
+import com.fast.learners.platform.iam.domain.model.commands.UpdateUserCommand;
 import com.fast.learners.platform.iam.domain.model.entities.Membership;
 import com.fast.learners.platform.iam.domain.services.UserCommandService;
 import com.fast.learners.platform.iam.infrastructure.persistence.jpa.repositories.MembershipRepository;
@@ -14,7 +13,6 @@ import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.springframework.stereotype.Service;
 
 import java.util.HashSet;
-import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
@@ -50,7 +48,9 @@ public class UserCommandServiceImpl implements UserCommandService {
      */
     @Override
     public Optional<ImmutablePair<User, String>> handle(SignInCommand command) {
+
         System.out.println(command.username());
+
         var user = userRepository.findByUsername(command.username());
         if (user.isEmpty())
             throw new RuntimeException("Profile not found");
@@ -103,5 +103,23 @@ public class UserCommandServiceImpl implements UserCommandService {
         user.setMemberships(memberships);
 
         return Optional.of(user);
+    }
+
+    @Override
+    public Optional<User> handle(UpdateUserCommand command) {
+
+        var user = userRepository.findByUsername(command.username());
+        if (user.isEmpty())
+            throw new RuntimeException("Profile not found");
+
+        var userResult = user.get();
+
+        userResult.setUsername(command.username());
+        userResult.setEmail(command.email());
+        userResult.setPassword(command.password());
+        userResult.getMemberships().clear();
+        userResult.addMemberships(command.memberships());
+
+        return Optional.of(userRepository.save(userResult));
     }
 }

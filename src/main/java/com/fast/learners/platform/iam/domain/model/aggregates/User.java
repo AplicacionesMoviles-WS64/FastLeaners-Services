@@ -29,10 +29,12 @@ public class User extends AuditableAbstractAggregateRoot<User> {
     private String username;
 
     @NotBlank
+    @Column
     @Size(max = 100)
     private String email;
 
     @NotBlank
+    @Column
     @Size(max = 120)
     private String password;
 

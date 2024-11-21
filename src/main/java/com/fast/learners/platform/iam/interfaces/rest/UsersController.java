@@ -35,7 +35,7 @@ public class UsersController {
     }
 
     @PutMapping("/setMembership")
-    public ResponseEntity<UserResource> updateUser(@RequestBody SetUserMembershipResource setUserMembershipResource) {
+    public ResponseEntity<UserResource> updateMembershipUser(@RequestBody SetUserMembershipResource setUserMembershipResource) {
 
         System.out.println(setUserMembershipResource);
         var user = userQueryService.handle(new GetUserByIdQuery(setUserMembershipResource.id()));
