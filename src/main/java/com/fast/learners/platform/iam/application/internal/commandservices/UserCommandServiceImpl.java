@@ -116,9 +116,6 @@ public class UserCommandServiceImpl implements UserCommandService {
 
         userResult.setUsername(command.username());
         userResult.setEmail(command.email());
-        userResult.setPassword(command.password());
-        userResult.getMemberships().clear();
-        userResult.addMemberships(command.memberships());
 
         return Optional.of(userRepository.save(userResult));
     }

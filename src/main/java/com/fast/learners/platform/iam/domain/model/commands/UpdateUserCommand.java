@@ -6,7 +6,5 @@ import java.util.List;
 import java.util.Set;
 
 public record UpdateUserCommand(String username,
-                                String email,
-                                String password,
-                                List<Membership> memberships) {
+                                String email) {
 }

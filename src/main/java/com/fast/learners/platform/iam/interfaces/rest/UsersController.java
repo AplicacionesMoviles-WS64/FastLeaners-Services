@@ -2,11 +2,14 @@ package com.fast.learners.platform.iam.interfaces.rest;
 
 import com.fast.learners.platform.iam.domain.model.queries.GetAllUsersQuery;
 import com.fast.learners.platform.iam.domain.model.queries.GetUserByIdQuery;
+import com.fast.learners.platform.iam.domain.model.queries.GetUserByUsernameQuery;
 import com.fast.learners.platform.iam.domain.services.UserCommandService;
 import com.fast.learners.platform.iam.domain.services.UserQueryService;
 import com.fast.learners.platform.iam.interfaces.rest.resources.SetUserMembershipResource;
+import com.fast.learners.platform.iam.interfaces.rest.resources.UpdateUserResource;
 import com.fast.learners.platform.iam.interfaces.rest.resources.UserResource;
 import com.fast.learners.platform.iam.interfaces.rest.transform.SetUserMembershipCommandFromResourceAssembler;
+import com.fast.learners.platform.iam.interfaces.rest.transform.UpdateResourceCommandFromResourceAssembler;
 import com.fast.learners.platform.iam.interfaces.rest.transform.UserResourceFromEntityAssembler;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.MediaType;
@@ -52,6 +55,24 @@ public class UsersController {
 
         return ResponseEntity.ok(userResult);
     }
+
+    @PutMapping("/updateUser")
+    public ResponseEntity<UserResource> updateUser(@RequestBody UpdateUserResource updateUserResource) {
+
+        var user = userQueryService.handle(new GetUserByUsernameQuery(updateUserResource.username()));
+
+        if (user.isEmpty()) {
+            return ResponseEntity.notFound().build();
+        }
+        var updateUserCommand = UpdateResourceCommandFromResourceAssembler.toCommandFromResource(updateUserResource);
+
+        var updatedUser = userCommandService.handle(updateUserCommand);
+
+        var userResource = UserResourceFromEntityAssembler.toResourceFromEntity(updatedUser.get());
+
+        return ResponseEntity.ok(userResource);
+    }
+
 
     /**
      * This method returns all the profiles.
